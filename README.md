@@ -122,7 +122,7 @@
 <summary>접기/펼치기</summary>
 <div markdown="1">
 
-## [사이클 게임]([https://www.acmicpc.net/problem/5972](https://www.acmicpc.net/problem/20040))
+## [사이클 게임](https://www.acmicpc.net/problem/20040)
 
 ### [민웅](<./사이클 게임/민웅.py>)
 
