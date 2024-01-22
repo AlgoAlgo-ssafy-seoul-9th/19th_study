@@ -8,11 +8,9 @@
 <summary>접기/펼치기</summary>
 <div markdown="1">
 
-
 ## [세로 읽기](https://www.codetree.ai/problems/vertical-reading/description)
 
-
-### [민웅](<./세로읽기/민웅.py>)
+### [민웅](./세로읽기/민웅.py)
 
 ```py
 import sys
@@ -44,32 +42,31 @@ for i in range(max_l):
 print(ans)
 ```
 
-### [상미](<./세로읽기/상미.py>)
+### [상미](./세로읽기/상미.py)
 
 ```py
 
 ```
 
-### [병국](<./세로읽기/병국.py>)
+### [병국](./세로읽기/병국.py)
 
 ```py
 
 ```
 
-### [성구](<./세로읽기/성구.py>)
+### [성구](./세로읽기/성구.py)
 
 ```py
 
 ```
 
-### [승우](<./세로읽기/승우.py>)
+### [승우](./세로읽기/승우.py)
 
 ```py
 
 ```
 
 ## [2배보다 커지는 수열](https://www.codetree.ai/training-field/search/problems/a-sequence-greater-than-twice/description?page=14&pageSize=20)
-
 
 ### [민웅](<./2배보다 커지는 수열/민웅.py>)
 
@@ -119,7 +116,6 @@ print(dp[-1][-1])
 ```
 
 ## [코드트리 사내 메신저](https://www.codetree.ai/problems/codetree-internal-messenger/description)
-
 
 ### [민웅](<./코드트리 사내 메신저/민웅.py>)
 
@@ -250,6 +246,34 @@ print(ans)
 ### [승우](<./사이클 게임/승우.py>)
 
 ```py
+import sys
+# sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
+
+n, m = map(int, input().split())
+
+def findset(n):
+    while parent[n] != n:
+        n = parent[n]
+    return n
+
+def union(a, b):
+    parent[findset(b)] = findset(a)
+
+
+parent = [i for i in range(n)]
+edge = [map(int,input().split()) for _ in range(m)]
+
+answer = 0
+
+for i in range(m):
+    a, b = edge[i]
+    if findset(a) == findset(b):
+        answer = i + 1
+        break
+    union(a, b)
+
+print(answer)
 
 ```
 
