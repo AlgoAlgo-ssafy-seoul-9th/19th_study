@@ -51,13 +51,48 @@ print(ans)
 ### [병국](./세로읽기/병국.py)
 
 ```py
-
+arr = []
+for i in range(4):
+    arr.append(list(input()))
+answer = ''
+dir = 0
+while True:
+    aa =''
+    flag = True
+    for i in range(len(arr)):
+        if len(arr[i]) == 0:
+            flag = False
+        else:
+            flag = True
+            break
+    if flag == False:
+        break
+    if arr[dir%4]:
+        aa = arr[dir%4].pop(0)
+    dir += 1
+    answer += aa
+print(answer)
 ```
 
 ### [성구](./세로읽기/성구.py)
 
 ```py
+import sys
+input = sys.stdin.readline
 
+
+def solution(arr:list) -> str:
+    ans = ""
+    for j in range(max(map(lambda x:len(x), arr))):
+        for i in range(4):
+            if j >= len(arr[i]):
+                continue
+            ans += arr[i][j]
+    return ans
+
+if __name__ == "__main__":
+    arr = [input().strip() for _ in range(4)]
+    print(solution(arr))
 ```
 
 ### [승우](./세로읽기/승우.py)
@@ -106,7 +141,34 @@ print(dp[-1][-1])
 ### [성구](<./2배보다 커지는 수열/성구.py>)
 
 ```py
+# 2배보다 커지는 수열 
+# 박영준 교수님의 힌트를 봤습니다
+import sys
+input = sys.stdin.readline
 
+'''
+0 1 2 3 4 5 6 7 8 9 10
+0 1 0 0 0 0 0 0 0 0 0 
+1 0 1 1 0 0 0 0 0 0 0
+2 0 0 0 1 1 0 0 0 0 0
+3 0 0 0 0 0 0 0 1 1 2
+'''
+
+
+def solution():
+    n, m = map(int, input().split())
+    dp = [[0] * (m+1) for i in range(1, n+1)]
+    for i in range(1, m//2**(n-1)+1):
+        dp[0][i] = 1
+    for i in range(1, n):
+        for j in range(2**(i), m//2**(n-i-1)+1):
+            dp[i][j] += sum(dp[i-1][:j//2+1])
+
+    print((sum(dp[n-1])) % 1_000_000_007)
+
+
+if __name__ == "__main__":
+    solution()
 ```
 
 ### [승우](<./2배보다 커지는 수열/승우.py>)
@@ -166,7 +228,39 @@ print(c_tree(1))
 ### [성구](<./코드트리 사내 메신저/성구.py>)
 
 ```py
+import sys
+input = sys.stdin.readline    
 
+
+def inorder(person:int, call:list):
+    # 내가 연락해야할 리스트(비용)
+    contact = []
+    for next in call[person]:
+        # 내가 연락할 사람이 앞으로 연락할 때 걸리는 시간 저장
+        contact.append(1+inorder(next, call)) # 1은 본인에게 inorder은 아랫사람에게
+    if contact: # 만약 다른사람에게 연락을 해야한다면
+        contact.sort(reverse=1)     # 연락할 사람이 많은 사람부터 연락 시작
+        for i in range(len(contact)):   # 순서 비용 추가
+            contact[i] += i
+
+        return max(contact) # 가장 비싼 비용이 모두 연락하는 비용과 같음
+    return 0
+        
+
+
+def solution():
+    N = int(input())
+    people = list(map(int, input().split()))
+    call = [[] for _ in range(N+1)]
+    # 연락 트리 만들기
+    for i in range(1, N):
+        call[people[i]].append(i+1)
+    ans = inorder(1, call)
+    print(ans)
+    
+
+if __name__ == "__main__":
+    solution()
 ```
 
 ### [승우](<./코드트리 사내 메신저/승우.py>)
@@ -266,13 +360,93 @@ print(cnt)
 ### [병국](<./사이클 게임/병국.py>)
 
 ```py
+# 틀림..(시간초과)
+import sys
+input = sys.stdin.readline
+def find(a):
+    while a != parent[a]:
+        a = parent[a]
+    return a
+
+def union(a,b):
+    a = find(a)
+    b = find(b)
+    if a != b:
+        parent[b] = a
+
+n,m = map(int,input().split())
+answer = 0
+parent = [i for i in range(n)]
+
+for i in range(m):
+    a,b = map(int,input().split())
+
+    # 부모다르면 부모합쳐줘
+    if parent[a] != parent[b]:
+        union(a,b)
+
+    # 부모가 같다? 사이클
+    else:
+        answer = i+1
+# print(parent)
+print(answer)
 
 ```
 
 ### [성구](<./사이클 게임/성구.py>)
 
 ```py
+# 20040 사이클 게임
+'''
+- 반복문 find
+    50548KB 552ms
+- recursion find
+    77844KB 700ms
+'''
+import sys
+sys.setrecursionlimit(10**6)
+input = sys.stdin.readline
 
+
+def find(x:int):
+    # 반복문 find 
+    tmp = x
+    while tmp != spots[tmp]:
+        tmp = spots[tmp]
+    spots[x] = spots[tmp]
+    return spots[x]
+
+
+def union(num1:int, num2:int):
+    f1 = find(num1)
+    f2 = find(num2)
+    # 같으면 Circle
+    # 이미 이어져 있는 간선은 같은 root를 가짐
+    if f1 != f2:
+        spots[f2] = f1
+        return 0
+    return 1
+
+
+
+def solution(N:int, M:int) -> int:
+    # 2개 간선은 Circle이 될 수 없음
+    for _ in range(2):
+        s, e = map(int, input().split())
+        union(s, e)
+    # 3개부터 Circle 체크
+    for turn in range(3, M+1):
+        s, e = map(int, input().split())
+        # Circle이 되면 1 반환
+        if union(s, e):
+            return turn
+    return 0
+
+
+if __name__ == "__main__":
+    N, M = map(int, input().split())
+    spots = [i for i in range(N)] 
+    print(solution(N, M))
 ```
 
 ### [승우](<./사이클 게임/승우.py>)
