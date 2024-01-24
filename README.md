@@ -51,7 +51,27 @@ print(ans)
 ### [병국](./세로읽기/병국.py)
 
 ```py
-
+arr = []
+for i in range(4):
+    arr.append(list(input()))
+answer = ''
+dir = 0
+while True:
+    aa =''
+    flag = True
+    for i in range(len(arr)):
+        if len(arr[i]) == 0:
+            flag = False
+        else:
+            flag = True
+            break
+    if flag == False:
+        break
+    if arr[dir%4]:
+        aa = arr[dir%4].pop(0)
+    dir += 1
+    answer += aa
+print(answer)
 ```
 
 ### [성구](./세로읽기/성구.py)
@@ -308,6 +328,36 @@ print(ans)
 ### [병국](<./사이클 게임/병국.py>)
 
 ```py
+# 틀림..(시간초과)
+import sys
+input = sys.stdin.readline
+def find(a):
+    while a != parent[a]:
+        a = parent[a]
+    return a
+
+def union(a,b):
+    a = find(a)
+    b = find(b)
+    if a != b:
+        parent[b] = a
+
+n,m = map(int,input().split())
+answer = 0
+parent = [i for i in range(n)]
+
+for i in range(m):
+    a,b = map(int,input().split())
+
+    # 부모다르면 부모합쳐줘
+    if parent[a] != parent[b]:
+        union(a,b)
+
+    # 부모가 같다? 사이클
+    else:
+        answer = i+1
+# print(parent)
+print(answer)
 
 ```
 
